@@ -1,0 +1,13 @@
+* {
+  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+.web-btn {
+  background: #0d1b2a;
+  color: #fff;
+}
+.web-btn:hover {
+  background: #000;
+  color: #fff;
+}/*# sourceMappingURL=global.css.map */

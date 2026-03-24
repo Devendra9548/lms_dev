@@ -1,0 +1,38 @@
+* {
+  font-family: "Poppins", sans-serif;
+  font-family: "Inter", sans-serif;
+}
+
+.web-btn {
+  background: #0d1b2a;
+  color: #fff;
+}
+.web-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+.form-main {
+  background: linear-gradient(119deg, rgba(249, 246, 246, 0.5) 7%, rgba(198, 255, 250, 0.5) 50%, rgb(253, 253, 253) 89%);
+  background: #f9f6f6;
+}
+.form-main .auth-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 30px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.24);
+  min-width: 400px;
+}
+.form-main .auth-box label {
+  font-size: 15px;
+}
+.form-main .auth-box input {
+  border: 1px solid rgba(0, 0, 0, 0.3333333333);
+}
+.form-main .auth-box h2 {
+  font-size: 34px;
+  text-transform: capitalize;
+}
+.form-main .auth-box span {
+  font-size: 13px !important;
+}/*# sourceMappingURL=login.css.map */
