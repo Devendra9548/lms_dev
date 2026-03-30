@@ -11,10 +11,53 @@
         min-width: 400px
         label
             font-size: 15px
-        input
+        input,select
             border: 1px solid #0005
+            &::placeholder
+                color: #0006
         h2
             font-size: 34px
             text-transform: capitalize
         span
             font-size: 13px !important
+
+    .auth-box-signup
+        min-width: 450px
+    .iti
+        display: block !important
+
+.dashboard
+    background-color: #f1f4fb
+    .sidebar
+        background: linear-gradient(180deg, #4e73df, #224abe)
+        min-height: 100vh
+    .sidebar .nav-link
+        color: #d1d3e2
+        font-weight: 500
+        border-radius: 8px
+        margin-bottom: 5px
+    .sidebar .nav-link.active,.sidebar .nav-link:hover
+        background-color: #ffffff
+        color: #224abe !important
+    .sidebar .nav-link i
+        margin-right: 8px
+    .card
+        border: none
+        border-radius: 15px
+    .card-title
+        font-weight: 600
+    .profile-box
+        text-align: center
+        padding: 20px 10px
+    .profile-box img
+        width: 70px
+        height: 70px
+        border-radius: 50%
+        border: 3px solid #fff
+
+.editprofile
+    background: #fff
+    padding: 30px
+    border-radius: 25px
+    input, select
+        border: 1px solid #0008

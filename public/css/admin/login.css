@@ -26,8 +26,17 @@
 .form-main .auth-box label {
   font-size: 15px;
 }
-.form-main .auth-box input {
+.form-main .auth-box input, .form-main .auth-box select {
   border: 1px solid rgba(0, 0, 0, 0.3333333333);
+}
+.form-main .auth-box input::-moz-placeholder, .form-main .auth-box select::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+.form-main .auth-box input:-ms-input-placeholder, .form-main .auth-box select:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+.form-main .auth-box input::placeholder, .form-main .auth-box select::placeholder {
+  color: rgba(0, 0, 0, 0.4);
 }
 .form-main .auth-box h2 {
   font-size: 34px;
@@ -35,4 +44,57 @@
 }
 .form-main .auth-box span {
   font-size: 13px !important;
+}
+.form-main .auth-box-signup {
+  min-width: 450px;
+}
+.form-main .iti {
+  display: block !important;
+}
+
+.dashboard {
+  background-color: #f1f4fb;
+}
+.dashboard .sidebar {
+  background: linear-gradient(180deg, #4e73df, #224abe);
+  min-height: 100vh;
+}
+.dashboard .sidebar .nav-link {
+  color: #d1d3e2;
+  font-weight: 500;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+.dashboard .sidebar .nav-link.active, .dashboard .sidebar .nav-link:hover {
+  background-color: #ffffff;
+  color: #224abe !important;
+}
+.dashboard .sidebar .nav-link i {
+  margin-right: 8px;
+}
+.dashboard .card {
+  border: none;
+  border-radius: 15px;
+}
+.dashboard .card-title {
+  font-weight: 600;
+}
+.dashboard .profile-box {
+  text-align: center;
+  padding: 20px 10px;
+}
+.dashboard .profile-box img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+.editprofile {
+  background: #fff;
+  padding: 30px;
+  border-radius: 25px;
+}
+.editprofile input, .editprofile select {
+  border: 1px solid rgba(0, 0, 0, 0.5333333333);
 }/*# sourceMappingURL=login.css.map */

@@ -4,5 +4,8 @@ Home
 @endsection
 
 @section('main')
-<h2>Home Page</h2>
+<ul>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/course">Course</a></li>
+</ul>
 @endsection
