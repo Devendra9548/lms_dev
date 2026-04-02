@@ -46,6 +46,7 @@
         </div>
 
         <button class="btn btn-login w-100 mt-3 web-btn" type="submit">Update Information</button>
+        <a href="{{ route('deleteprofile', Auth()->user()->id) }}" class="btn btn-danger w-100 mt-3" onclick="return confirm('Are you sure you want to delete this account?')">Delete Account?</a>
         <div class="bottom-text text-center mt-3">
             Want to change password? <a href="{{ route('editpassword', Auth()->user()->id) }}" wire:navigate>Click Here</a>
         </div>

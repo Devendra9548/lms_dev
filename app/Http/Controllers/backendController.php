@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\InstituteUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Mail;
+use App\Mail\SendOtpMail;
 
 class backendController extends Controller
 {
@@ -66,65 +69,69 @@ class backendController extends Controller
         return view('back.signup');
       }
     }
+ 
     function signing(Request $req){
-      $emailRule = $req->suser == 'faculty'
+      if($req->has('otp')){
+        if(now()->greaterThan(Session::get('otp_expire'))){
+            return back()
+                ->with('fail', 'OTP Expired. Please try again.')
+                ->with('show_otp', true);
+        }
+        if($req->otp != Session::get('signup_otp')){
+            return back()
+                ->with('fail', 'Invalid OTP')
+                ->with('show_otp', true);  
+        }
+        $rdata = Session::get('signup_data');
+        $userdata = [
+            'email' => $rdata['email'],
+            'password' => $rdata['raw_password'], 
+        ];
+
+        if($rdata['role'] == 'faculty'){
+            User::create($rdata);
+            Auth::guard('web')->attempt($userdata);
+        } 
+        else{
+            InstituteUser::create($rdata);
+            Auth::guard('institute_users')->attempt($userdata);
+        }
+        Session::forget(['signup_otp', 'signup_data', 'otp_expire']);
+        return redirect()->route('dashboard')->with('success', 'Signup Successful');
+    }
+
+    $emailRule = $req->suser == 'faculty'
         ? 'required|email|unique:users,email'
         : 'required|email|unique:institute_users,email';
 
-      $rs = $req->validate([
+    $req->validate([
         'uname' => 'required',
         'uemail' => $emailRule,
         'uphone' => 'required|phone:AUTO',
         'suser' => 'required',
         'upass' => 'required|min:6|max:12|confirmed',
-      ],
-      [
-        'uname.required' => 'Please enter your Correct Full Name.',
-        'uemail.required' => 'Please enter your Correct Email.',
-        'uphone.required' => 'Please enter your Correct Phone Number.',
-        'upass.required' => 'Please enter your Correct Password.',
-        'upass.confirmed' => 'Password Not Matched.',
-        'uphone.phone' => 'Please enter your Correct Phone Number.'
+    ]);
 
-      ],
-      [
-        'uemail' => 'Email',
-        'upass' => 'Password',
-        'suser' => 'User',
-        
-      ]
-    );
+    $otp = rand(100000, 999999);
 
-    $rdata=[
-      'name' => $req->uname,
-      'email' => $req->uemail,
-      'phone' => $req->uphone,
-      'role' => $req->suser,
-      'img' => 'thumb.jpg',
-      'password' => $req->upass,
-    ];
-    $userdata=[
-      'email' => $req->uemail,
-      'password' => $req->upass,
+    $rdata = [
+        'name' => $req->uname,
+        'email' => $req->uemail,
+        'phone' => $req->uphone,
+        'role' => $req->suser,
+        'img' => 'thumb.jpg',
+        'password' => $req->upass,
+        'raw_password' => $req->upass,
     ];
 
-    
+    Session::put('signup_otp', $otp);
+    Session::put('signup_data', $rdata);
+    Session::put('otp_expire', now()->addMinutes(1));
 
-    if($req->suser == 'faculty'){
-      User::create($rdata);
-      if(Auth::guard('web')->attempt($userdata)){
-        return redirect()->route('dashboard')->with('success', 'Successful Login Faculty');
-      }
-      return back()->with('fail', 'Something Wrong. please try with different details');
-    }
-    else{
-      InstituteUser::create($rdata);
-      if(Auth::guard('institute_users')->attempt($userdata)){
-        return redirect()->route('dashboard')->with('success', 'Successful Login Student');
-      }
-      return back()->with('fail', 'Something Wrong. please try with different details');
-    }
-  }
+    Mail::to($req->uemail)->send(new SendOtpMail($otp));
+
+    return back()->with('show_otp', true);
+}
 
   public function logout(){
     foreach (['web', 'institute_users'] as $guard) {
@@ -239,5 +246,68 @@ class backendController extends Controller
     }
   }
 
+
+  function deletingprofile(Request $req){
+    if($req->has('otp')){
+      if(now()->greaterThan(Session::get('otp_expire'))){
+          return back()
+              ->with('fail', 'OTP Expired. Please try again.')
+              ->with('show_otp', true);
+      }
+      if($req->otp != Session::get('signup_otp')){
+          return back()
+              ->with('fail', 'Invalid OTP')
+              ->with('show_otp', true);  
+      }
+      $rdata = Session::get('signup_data');
+      $userdata = [
+          'email' => $rdata['email'],
+          'password' => $rdata['raw_password'], 
+      ];
+
+      if($rdata['role'] == 'faculty'){
+          User::create($rdata);
+          Auth::guard('web')->attempt($userdata);
+      } 
+      else{
+          InstituteUser::create($rdata);
+          Auth::guard('institute_users')->attempt($userdata);
+      }
+      Session::forget(['signup_otp', 'signup_data', 'otp_expire']);
+      return redirect()->route('dashboard')->with('success', 'Signup Successful');
+  }
+
+  $emailRule = $req->suser == 'faculty'
+      ? 'required|email|unique:users,email'
+      : 'required|email|unique:institute_users,email';
+
+  $req->validate([
+      'uname' => 'required',
+      'uemail' => $emailRule,
+      'uphone' => 'required|phone:AUTO',
+      'suser' => 'required',
+      'upass' => 'required|min:6|max:12|confirmed',
+  ]);
+
+  $otp = rand(100000, 999999);
+
+  $rdata = [
+      'name' => $req->uname,
+      'email' => $req->uemail,
+      'phone' => $req->uphone,
+      'role' => $req->suser,
+      'img' => 'thumb.jpg',
+      'password' => $req->upass,
+      'raw_password' => $req->upass,
+  ];
+
+  Session::put('signup_otp', $otp);
+  Session::put('signup_data', $rdata);
+  Session::put('otp_expire', now()->addMinutes(1));
+
+  Mail::to($req->uemail)->send(new SendOtpMail($otp));
+
+  return back()->with('show_otp', true);
+}
 
 }

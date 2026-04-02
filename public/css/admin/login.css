@@ -26,16 +26,16 @@
 .form-main .auth-box label {
   font-size: 15px;
 }
-.form-main .auth-box input, .form-main .auth-box select {
+.form-main .auth-box input, .form-main .auth-box select, .form-main .auth-box textarea {
   border: 1px solid rgba(0, 0, 0, 0.3333333333);
 }
-.form-main .auth-box input::-moz-placeholder, .form-main .auth-box select::-moz-placeholder {
+.form-main .auth-box input::-moz-placeholder, .form-main .auth-box select::-moz-placeholder, .form-main .auth-box textarea::-moz-placeholder {
   color: rgba(0, 0, 0, 0.4);
 }
-.form-main .auth-box input:-ms-input-placeholder, .form-main .auth-box select:-ms-input-placeholder {
+.form-main .auth-box input:-ms-input-placeholder, .form-main .auth-box select:-ms-input-placeholder, .form-main .auth-box textarea:-ms-input-placeholder {
   color: rgba(0, 0, 0, 0.4);
 }
-.form-main .auth-box input::placeholder, .form-main .auth-box select::placeholder {
+.form-main .auth-box input::placeholder, .form-main .auth-box select::placeholder, .form-main .auth-box textarea::placeholder {
   color: rgba(0, 0, 0, 0.4);
 }
 .form-main .auth-box h2 {
@@ -95,6 +95,6 @@
   padding: 30px;
   border-radius: 25px;
 }
-.editprofile input, .editprofile select {
+.editprofile input, .editprofile select, .editprofile textarea {
   border: 1px solid rgba(0, 0, 0, 0.5333333333);
 }/*# sourceMappingURL=login.css.map */

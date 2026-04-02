@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('img')->default('thumb.jpg');
             $table->string('password');
             $table->boolean('dsstatus', 1)->default(0);
+            $table->string('delete_reason')->nullable();
+            $table->string('otp')->nullable();
+            $table->timestamp('otp_expires_at')->nullable();
+            $table->boolean('is_verified')->default(false);
             $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

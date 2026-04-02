@@ -8,11 +8,12 @@ use App\Livewire\Back\Dashboard;
 use App\Livewire\Back\Maincourses;
 use App\Livewire\Back\Editprofile;
 use App\Livewire\Back\Editpassword;
+use App\Livewire\Back\Deleteprofile;
 
 use App\Livewire\Front\Home;
 use App\Livewire\Front\About;
 
-Route::get('/', Home::class);
+Route::get('/', Home::class)->name('home');
 Route::get('about', About::class);
 
 Route::prefix('admin')->group(function(){
@@ -28,5 +29,7 @@ Route::prefix('admin')->group(function(){
     Route::post('editprofile/{id}', [backendController::class, 'updateprofile'])->name('updateprofile')->middleware('auth:web,institute_users');
     Route::get('editpassword/{id}', Editpassword::class)->name('editpassword')->middleware('auth:web,institute_users');
     Route::post('editpassword/{id}', [backendController::class, 'updatepassword'])->name('updatepassword')->middleware('auth:web,institute_users');
+    Route::get('deleteprofile/{id}', Deleteprofile::class)->name('deleteprofile')->middleware('auth:web,institute_users');
+    Route::post('deleteprofile/{id}', [backendController::class, 'updatepassword'])->name('updatepassword')->middleware('auth:web,institute_users');
 });
 

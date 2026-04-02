@@ -18,6 +18,8 @@ class InstituteUser extends Authenticatable
         'password',
         'role',
         'img',      
+        'delete_reason',
+        'dsstatus',
     ];
 
     protected $hidden = [
