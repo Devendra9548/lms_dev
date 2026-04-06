@@ -48,6 +48,10 @@ class backendController extends Controller
        
       if($req->suser == 'faculty'){
         if(Auth::guard('web')->attempt($userdata)){
+          session([
+            'user_id' => $req->uemail,
+            'user_type' => 'web', 
+          ]);
           return redirect()->route('dashboard')->with('success', 'Successful Login Faculty');
         }
         return back()->with('fail', 'Something Wrong. please try with different details');
@@ -55,6 +59,10 @@ class backendController extends Controller
       else{
         $user = InstituteUser::where('email', $req->uemail)->first();
         if(Auth::guard('institute_users')->attempt($userdata)){
+          session([
+            'user_id' => $req->uemail,
+            'user_type' => 'institute_users', 
+          ]);
           return redirect()->route('dashboard')->with('success', 'Successful Login Student');
         }
         return back()->with('fail', 'Something Wrong. please try with different details');

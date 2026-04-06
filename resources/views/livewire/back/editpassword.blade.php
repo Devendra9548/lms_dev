@@ -8,7 +8,7 @@
 
         <div class="my-3">
             <label>Password</label>
-            <input type="password" class="form-control" value="{{ Auth::user()->password }}" placeholder="Password"
+            <input type="password" class="form-control" value="********" placeholder="Password"
                 autocomplete="new-password" name="upass">
             @error('upass')
             <span class="text-danger fw-bold">{{ $message}}</span>
@@ -17,7 +17,7 @@
 
         <div class="my-3">
             <label>Confirm Password</label>
-            <input type="password" class="form-control" value="{{ Auth::user()->password }}" placeholder="Password"
+            <input type="password" class="form-control" value="********" placeholder="Password"
                 autocomplete="new-password" name="upass_confirmation">
         </div>
 

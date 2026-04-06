@@ -12,10 +12,6 @@
   color: #fff;
 }
 
-.form-main {
-  background: linear-gradient(119deg, rgba(249, 246, 246, 0.5) 7%, rgba(198, 255, 250, 0.5) 50%, rgb(253, 253, 253) 89%);
-  background: #f9f6f6;
-}
 .form-main .auth-box {
   background: #fff;
   padding: 30px;
@@ -46,7 +42,7 @@
   font-size: 13px !important;
 }
 .form-main .auth-box-signup {
-  min-width: 450px;
+  min-width: 475px;
 }
 .form-main .iti {
   display: block !important;

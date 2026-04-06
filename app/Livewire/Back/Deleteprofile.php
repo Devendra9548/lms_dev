@@ -42,7 +42,6 @@ class DeleteProfile extends Component
             'otp' => 'required|digits:6',
         ]);
 
-        // OTP validation
         if(now()->greaterThan(Session::get('otp_expire'))){
             $this->addError('otp', 'OTP expired. Please reload the page.');
             return;
@@ -53,7 +52,6 @@ class DeleteProfile extends Component
             return;
         }
 
-        // Update user status
         $user = User::find($this->userId);
         $table = 'users';
         if(!$user){
@@ -74,6 +72,7 @@ class DeleteProfile extends Component
         // Feedback
         session()->flash('success','Account deleted successfully');
         $this->showForm = false;
+        return redirect()->route('account-deleted');
     }
 
     public function render()

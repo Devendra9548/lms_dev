@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\Checkuserstatus;
+use App\Http\Middleware\AuthenticateMultipleGuards;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,10 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->use([
-            Checkuserstatus::class,
+        $middleware->alias([
+            'auth.multiple' => AuthenticateMultipleGuards::class,
         ]);
     })
+    
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
