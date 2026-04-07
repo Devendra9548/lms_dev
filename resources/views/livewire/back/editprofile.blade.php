@@ -1,3 +1,14 @@
+@section('title', 'LMS - Edit Profile')
+@prepend('head-script')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css" />
+<script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
+<style>
+    .iti--allow-dropdown{
+        width:100%!important;
+    }
+</style>
+@endprepend
+
 <div class="auth-box auth-box-signup editprofile">
     <h2 class="h5">Edit Information - {{ Auth::user()->name }}</h2>
     <div class="subtitle mb-4">You can edit below details.</div>
@@ -15,17 +26,8 @@
         </div>
 
         <div class="my-4">
-            <label>Email</label>
-            <input type="email" class="form-control" value="{{ Auth::user()->email }}" placeholder="Enter your email"
-                autocomplete="off" name="uemail">
-            @error('uemail')
-            <span class="text-danger fw-bold">{{ $message}}</span>
-            @enderror
-        </div>
-
-        <div class="my-4">
             <label>Phone Number</label> <br>
-            <input type="tel" id="phone" class="form-control d-block" value="{{ Auth::user()->phone }}" name="uphone"
+            <input type="tel" id="phone" class="form-control d-block w-100" value="{{ Auth::user()->phone }}" name="uphone"
                 autocomplete="off">
 
             @error('uphone')
@@ -59,3 +61,23 @@
     </form>
 
 </div>
+@push('foot-script')
+<script>
+const input = document.querySelector("#phone");
+
+const iti = window.intlTelInput(input, {
+    initialCountry: "in",
+    separateDialCode: true,
+    preferredCountries: ["in"],
+    onlyCountries: [
+        "in", "us", "gb", "ae", "sa", "ca", "au"
+    ],
+
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js"
+});
+
+document.querySelector("form").addEventListener("submit", function() {
+    input.value = iti.getNumber();
+});
+</script>
+@endpush

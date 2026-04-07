@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\frontendController;
 use App\Http\Controllers\backendController;
+use App\Http\Controllers\GoogleController;
 
 use App\Livewire\Back\Dashboard;
 use App\Livewire\Back\Maincourses;
@@ -19,11 +20,16 @@ Route::get('about', About::class);
 
 Route::get('account-deleted', AccountDeactivate::class)->name('account-deleted')->middleware('auth.multiple');
 
+Route::get('auth/google', [GoogleController::class, 'redirect']);
+Route::get('auth/google/callback', [GoogleController::class, 'callback']);
+
 Route::prefix('admin')->group(function(){
     Route::get('/', [backendController::class, 'login']);
     Route::get('login', [backendController::class, 'login'])->name('login');
     Route::get('signup', [backendController::class, 'signup'])->name('signup');
     Route::post('signing', [backendController::class, 'signing'])->name('signing');
+    Route::get('forget-password', [backendController::class, 'forgetpassword'])->name('forget-password');
+    Route::post('recover-password', [backendController::class, 'recoverpassword'])->name('recoverpassword');
     Route::post('logining', [backendController::class, 'logining'])->name('logining');
     Route::get('logout', [backendController::class, 'logout'])->name('logout');
     Route::get('dashboard', Dashboard::class)->name('dashboard')->middleware('auth.multiple');

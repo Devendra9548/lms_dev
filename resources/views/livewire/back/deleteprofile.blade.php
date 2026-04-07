@@ -1,3 +1,5 @@
+@section('title', 'LMS - Delete Profile')
+
 <div class="auth-box auth-box-signup editprofile">
     @if($showForm)
     <h2 class="h5">{{ Auth::user()->name }}. Are you Sure you want to Delete Account?</h2>

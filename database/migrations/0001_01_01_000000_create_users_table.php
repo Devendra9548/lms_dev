@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone', 20)->unique();
+            $table->string('phone', 20)->nullable();
             $table->string('role', 20);
             $table->string('img')->default('thumb.jpg');
             $table->string('password');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('delete_reason')->nullable();
             $table->string('otp')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
+            $table->string('google_id')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();

@@ -78,7 +78,7 @@ class backendController extends Controller
       }
     }
  
-    function signing(Request $req){
+  function signing(Request $req){
       if($req->has('otp')){
         if(now()->greaterThan(Session::get('otp_expire'))){
             return back()
@@ -139,7 +139,91 @@ class backendController extends Controller
     Mail::to($req->uemail)->send(new SendOtpMail($otp));
 
     return back()->with('show_otp', true);
-}
+  }
+
+  public function forgetpassword(){
+     if (Auth::guard('web')->check() || Auth::guard('institute_users')->check()) {
+       return redirect()->route('dashboard')->with('success', 'Successful Login');      
+     }
+     else{
+       return view('back.forget-password');
+      }
+  }
+
+  function recoverpassword(Request $req)
+  {
+    if ($req->has('otp')) {
+        // Validate OTP and new password
+        $req->validate([
+            'suser' => 'required',
+            'upass' => 'required|min:6|max:12|confirmed',
+            'otp' => 'required',
+        ]);
+
+        // Check if OTP expired
+        if (now()->greaterThan(Session::get('otp_expire'))) {
+            return back()
+                ->with('fail', 'OTP Expired. Please try again.')
+                ->with('show_otp', true);
+        }
+
+        // Check if OTP matches
+        if ($req->otp != Session::get('signup_otp')) {
+            return back()
+                ->with('fail', 'Invalid OTP')
+                ->with('show_otp', true);
+        }
+
+        // Find the user by email stored in session
+        $email = Session::get('otp_email');
+        if ($req->suser == 'faculty') {
+            $user = User::where('email', $email)->first();
+        } else {
+            $user = InstituteUser::where('email', $email)->first();
+        }
+
+        if (!$user) {
+            return back()->with('fail', 'User not found.')->with('show_otp', true);
+        }
+
+        // Update password (hashed)
+        $user->update([
+            'password' => Hash::make($req->upass),
+        ]);
+
+        // Forget OTP sessions
+        Session::forget(['signup_otp', 'otp_expire', 'otp_email']);
+
+        return redirect()->route('login')->with('success', 'Password reset successfully!');
+    }
+
+    // If OTP not submitted yet
+    $req->validate([
+        'suser' => 'required',
+        'uemail' => 'required|email',
+    ]);
+
+    $email = $req->uemail;
+    if ($req->suser == 'faculty') {
+        $user = User::where('email', $email)->first();
+    } else {
+        $user = InstituteUser::where('email', $email)->first();
+    }
+
+    if (!$user) {
+        return back()->with('fail', 'Email not registered.');
+    }
+
+    // Generate OTP and send mail
+    $otp = rand(100000, 999999);
+    Session::put('signup_otp', $otp);
+    Session::put('otp_expire', now()->addMinutes(5)); // 5 minutes OTP expiry
+    Session::put('otp_email', $email);
+
+    Mail::to($email)->send(new SendOtpMail($otp));
+
+    return back()->with('show_otp', true)->with('success', 'OTP sent to your email.');
+  }
 
   public function logout(){
     foreach (['web', 'institute_users'] as $guard) {
@@ -153,28 +237,14 @@ class backendController extends Controller
   }
   
   public function updateprofile(Request $req, $id){
-    $emailRule = $req->suser == 'faculty'
-    ? [
-        'required',
-        'email',
-        Rule::unique('users', 'email')->ignore(auth()->id())
-      ]
-    : [
-        'required',
-        'email',
-        Rule::unique('institute_users', 'email')->ignore(auth()->id())
-      ];
-
       $rs = $req->validate([
         'uname' => 'required',
-        'uemail' => $emailRule,
         'uphone' => 'required|phone:AUTO',
         'suser' => 'required',
         'img' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:300',
       ],
       [
         'uname.required' => 'Please enter your Correct Full Name.',
-        'uemail.required' => 'Please enter your Correct Email.',
         'uphone.required' => 'Please enter your Correct Phone Number.',
         'uphone.phone' => 'Please enter your Correct Phone Number.',
         'img.image' => 'File must be an image.',
@@ -182,7 +252,6 @@ class backendController extends Controller
         'img.max' => 'Image size must not exceed 300KB.',
       ],
       [
-        'uemail' => 'Email',
         'suser' => 'User',
         'img' => 'Image',
       ]
@@ -204,7 +273,6 @@ class backendController extends Controller
 
     $rdata=[
       'name' => $req->uname,
-      'email' => $req->uemail,
       'phone' => $req->uphone,
       'role' => $req->suser,
       'img' => $hasimg,

@@ -22,7 +22,7 @@
         </div>
 
 
-        <button class="btn btn-login w-100 mt-3 web-btn" type="submit">Update Information</button>
+        <button class="btn btn-login w-100 mt-3 web-btn" type="submit">Update Password</button>
         <div class="bottom-text text-center mt-3">
             Want to edit profile? <a href="{{ route('editprofile', Auth()->user()->id) }}" wire:navigate>Click Here</a>
         </div>

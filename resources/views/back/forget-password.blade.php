@@ -1,5 +1,5 @@
 @extends('back.main')
-@section('title', 'Sign Up - LMS')
+@section('title', 'Reset Password - LMS')
 @prepend('head-script')
 <link rel="stylesheet" href="/css/admin/login.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css" />
@@ -23,55 +23,13 @@ body {
             <div class="form-main d-flex align-items-center justify-content-center py-5">
 
                 <div class="auth-box auth-box-signup">
-                    <h2>Sign Up Now</h2>
+                    <h2>Reset Password</h2>
                     <div class="subtitle mb-4">Please enter your details.</div>
 
-                    <form action="{{route('signing')}}" method="POST" autocomplete="off">
+                    <form action="{{route('recoverpassword')}}" method="POST" autocomplete="off">
                         @csrf
+
                         @if(session('show_otp'))
-                        <div class="my-3">
-                            <label>Enter OTP</label>
-                            <input type="text" name="otp" class="form-control" placeholder="Enter OTP">
-                        </div>
-                        @else
-                        <div class="my-3">
-                            <label>Full Name</label>
-                            <input type="text" class="form-control" value="{{ old('uname') }}"
-                                placeholder="Enter Full Name" autocomplete="off" name="uname">
-                            @error('uname')
-                            <span class="text-danger fw-bold">{{ $message}}</span>
-                            @enderror
-                        </div>
-
-                        <div class="my-3">
-                            <label>Email</label>
-                            <input type="email" class="form-control" value="{{ old('uemail') }}"
-                                placeholder="Enter your email" autocomplete="off" name="uemail">
-                            @error('uemail')
-                            <span class="text-danger fw-bold">{{ $message}}</span>
-                            @enderror
-                        </div>
-                        <div class="my-3">
-                            <label>Phone Number</label> <br>
-                            <input type="tel" id="phone" class="form-control d-block" value="{{ old('uphone') }}"
-                                name="uphone" autocomplete="off">
-
-                            @error('uphone')
-                            <span class="text-danger fw-bold">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <div class="my-3">
-                            <label>Select User</label>
-                            <select name="suser" id="suser" class="form-control">
-                                <option value="student">Student</option>
-                                <option value="faculty">Faculty</option>
-                            </select>
-                            @error('suser')
-                            <span class="text-danger fw-bold">{{ $message}}</span>
-                            @enderror
-                        </div>
-
                         <div class="my-3">
                             <label>Password</label>
                             <input type="password" class="form-control" placeholder="Password"
@@ -86,14 +44,39 @@ body {
                             <input type="password" class="form-control" placeholder="Password"
                                 autocomplete="new-password" name="upass_confirmation">
                         </div>
+
+                        <div class="my-3">
+                            <label>Enter OTP</label>
+                            <input type="text" name="otp" class="form-control" placeholder="Enter OTP">
+                        </div>
+
+                        @else
+                        <div class="my-3">
+                            <label>Email</label>
+                            <input type="email" class="form-control" value="{{ old('uemail') }}"
+                                placeholder="Enter your email" autocomplete="off" name="uemail">
+                            @error('uemail')
+                            <span class="text-danger fw-bold">{{ $message}}</span>
+                            @enderror
+                        </div>
+                        <div class="my-3">
+                            <label>Select User</label>
+                            <select name="suser" id="suser" class="form-control">
+                                <option value="student">Student</option>
+                                <option value="faculty">Faculty</option>
+                            </select>
+                            @error('suser')
+                            <span class="text-danger fw-bold">Please Try again</span>
+                            @enderror
+                        </div>
                         @endif
 
 
                         <button class="btn btn-login w-100 mt-3 web-btn" type="submit">
                             @if(session('show_otp'))
-                            Submit OTP
+                            Create New Password
                             @else
-                            Sign Up
+                            Reset Password
                             @endif
                         </button>
                         <button type="button" data-bs-toggle="modal" data-bs-target="#roleModal"

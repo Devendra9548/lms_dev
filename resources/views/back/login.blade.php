@@ -58,12 +58,11 @@ body {
                         </div>
 
                         <div class="my-3 text-end">
-                            <a href="#" class="link">Forgot password</a>
+                            <a href="{{route('forget-password')}}" class="link">Forgot password</a>
                         </div>
 
                         <button class="btn btn-login w-100 mb-3 web-btn" type="submit">Login</button>
-
-                        <button type="button"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#roleModal"
                             class="btn btn-google w-100 d-flex align-items-center justify-content-center gap-2 mb-3">
                             <img src="https://img.icons8.com/color/18/google-logo.png" />
                             Sign in with Google
@@ -90,8 +89,56 @@ body {
         </div>
     </div>
 </section>
+<!-- Role Selection Modal -->
+<div class="modal fade" id="roleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+
+      <div class="modal-header border-0">
+        <h5 class="modal-title w-100 text-center">Continue as</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+
+        <button onclick="redirectGoogle('student')" 
+                class="btn btn-outline-primary w-100 mb-3">
+            🎓 I am Student
+        </button>
+
+        <button onclick="redirectGoogle('faculty')" 
+                class="btn btn-outline-dark w-100">
+            👨‍🏫 I am Faculty
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 @endsection
 
 
 @push('foot-script')
+<script>
+function redirectGoogle(role) {
+    window.location.href = "/auth/google?role=" + role;
+}
+</script>
 @endpush
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

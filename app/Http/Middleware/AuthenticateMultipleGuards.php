@@ -15,22 +15,37 @@ class AuthenticateMultipleGuards
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-{
-    if (Auth::guard('web')->check() || Auth::guard('institute_users')->check()) {
+    {
+    $guard = null;
+
+    if (Auth::guard('web')->check()) {
+        Auth::shouldUse('web');
+        $guard = 'web';
+    } elseif (Auth::guard('institute_users')->check()) {
+        Auth::shouldUse('institute_users');
+        $guard = 'institute_users';
+
+    }
+
+    if ($guard) {
+        $user = Auth::guard($guard)->user();
+
         if ($request->routeIs('account-deleted')) {
-            Auth::logout();
+            Auth::guard($guard)->logout();
             return $next($request);
         }
 
-        if (Auth::user()->dsstatus == 1) {
+        if ($user && $user->dsstatus == 1) {
             return redirect()->route('account-deleted');
         }
-        if (Auth::user()->dsstatus == 0) {
-            dd("work");
+
+        if ($user && $user->dsstatus == 0) {
+            return $next($request);
         }
+
         return $next($request);
     }
-    return redirect()->route('login');
-}
-}
 
+    return redirect()->route('login');
+   }
+}
