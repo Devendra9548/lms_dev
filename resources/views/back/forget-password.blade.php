@@ -31,7 +31,7 @@ body {
 
                         @if(session('show_otp'))
                         <div class="my-3">
-                            <label>Password</label>
+                            <label>Create New Password</label>
                             <input type="password" class="form-control" placeholder="Password"
                                 autocomplete="new-password" name="upass">
                             @error('upass')

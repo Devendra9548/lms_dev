@@ -153,30 +153,27 @@ class backendController extends Controller
   function recoverpassword(Request $req)
   {
     if ($req->has('otp')) {
-        // Validate OTP and new password
         $req->validate([
-            'suser' => 'required',
             'upass' => 'required|min:6|max:12|confirmed',
             'otp' => 'required',
         ]);
 
-        // Check if OTP expired
         if (now()->greaterThan(Session::get('otp_expire'))) {
             return back()
                 ->with('fail', 'OTP Expired. Please try again.')
                 ->with('show_otp', true);
         }
 
-        // Check if OTP matches
         if ($req->otp != Session::get('signup_otp')) {
             return back()
                 ->with('fail', 'Invalid OTP')
                 ->with('show_otp', true);
         }
 
-        // Find the user by email stored in session
         $email = Session::get('otp_email');
-        if ($req->suser == 'faculty') {
+        $suser = Session::get('suser');
+
+        if ($suser == 'faculty') {
             $user = User::where('email', $email)->first();
         } else {
             $user = InstituteUser::where('email', $email)->first();
@@ -184,26 +181,23 @@ class backendController extends Controller
 
         if (!$user) {
             return back()->with('fail', 'User not found.')->with('show_otp', true);
+            Session::forget('suser');
         }
 
-        // Update password (hashed)
         $user->update([
             'password' => Hash::make($req->upass),
         ]);
-
-        // Forget OTP sessions
-        Session::forget(['signup_otp', 'otp_expire', 'otp_email']);
-
+        Session::forget(['signup_otp', 'otp_expire', 'otp_email', 'suser']);
         return redirect()->route('login')->with('success', 'Password reset successfully!');
     }
 
-    // If OTP not submitted yet
     $req->validate([
         'suser' => 'required',
         'uemail' => 'required|email',
     ]);
 
     $email = $req->uemail;
+    session(['suser' => $req->suser]);
     if ($req->suser == 'faculty') {
         $user = User::where('email', $email)->first();
     } else {
@@ -214,7 +208,6 @@ class backendController extends Controller
         return back()->with('fail', 'Email not registered.');
     }
 
-    // Generate OTP and send mail
     $otp = rand(100000, 999999);
     Session::put('signup_otp', $otp);
     Session::put('otp_expire', now()->addMinutes(5)); // 5 minutes OTP expiry
