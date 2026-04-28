@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\InstituteUser;
+use App\Models\UserActivity;
+use App\Models\LoginActivity;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Mail;
@@ -228,7 +230,18 @@ class backendController extends Controller
     request()->session()->regenerateToken();
     return redirect()->route('login')->with('success', 'You are Logout');
   }
-  
+  public function logoutactivity($id){
+    foreach (['web', 'institute_users'] as $guard) {
+      if (Auth::guard($guard)->check()) {
+          LoginActivity::where('loggable_id', $id)->delete();
+          UserActivity::where('activityable_id', $id)->delete();
+          Auth::guard($guard)->logout();
+      }
+    }
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect()->route('login')->with('success', 'You are Logout');
+  }
   public function updateprofile(Request $req, $id){
       $rs = $req->validate([
         'uname' => 'required',

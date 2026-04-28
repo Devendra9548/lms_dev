@@ -48,44 +48,6 @@
   display: block !important;
 }
 
-.dashboard {
-  background-color: #f1f4fb;
-}
-.dashboard .sidebar {
-  background: linear-gradient(180deg, #4e73df, #224abe);
-  min-height: 100vh;
-}
-.dashboard .sidebar .nav-link {
-  color: #d1d3e2;
-  font-weight: 500;
-  border-radius: 8px;
-  margin-bottom: 5px;
-}
-.dashboard .sidebar .nav-link.active, .dashboard .sidebar .nav-link:hover {
-  background-color: #ffffff;
-  color: #224abe !important;
-}
-.dashboard .sidebar .nav-link i {
-  margin-right: 8px;
-}
-.dashboard .card {
-  border: none;
-  border-radius: 15px;
-}
-.dashboard .card-title {
-  font-weight: 600;
-}
-.dashboard .profile-box {
-  text-align: center;
-  padding: 20px 10px;
-}
-.dashboard .profile-box img {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 3px solid #fff;
-}
-
 .editprofile {
   background: #fff;
   padding: 30px;

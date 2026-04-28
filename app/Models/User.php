@@ -51,4 +51,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function activities()
+    {
+       return $this->morphMany(UserActivity::class, 'activityable');
+    }
+    
 }

@@ -32,6 +32,7 @@ Route::prefix('admin')->group(function(){
     Route::post('recover-password', [backendController::class, 'recoverpassword'])->name('recoverpassword');
     Route::post('logining', [backendController::class, 'logining'])->name('logining');
     Route::get('logout', [backendController::class, 'logout'])->name('logout');
+    Route::get('logout-activity/{id}', [backendController::class, 'logoutactivity'])->name('logoutactivity');
     Route::get('dashboard', Dashboard::class)->name('dashboard')->middleware('auth.multiple');
     Route::get('courses', Maincourses::class)->name('courses')->middleware('auth.multiple');
     Route::get('editprofile/{id}', Editprofile::class)->name('editprofile')->middleware('auth.multiple');

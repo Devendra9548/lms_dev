@@ -31,38 +31,23 @@
         </div>
     </div>
 
-    <!-- Courses & Activity -->
+
     <div class="row g-3">
-
-        <!-- Recent Activity -->
+        <!-- Login Activity -->
         <div class="col-lg-6">
-            <div class="card shadow-sm p-3">
-                <h5 class="card-title">Recent Activity</h5>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Submitted AI Assignment</li>
-                    <li class="list-group-item">New message from Instructor</li>
-                    <li class="list-group-item">Java Quiz graded</li>
-                </ul>
+            <div class="card shadow-sm p-4">
+
+                <h5 class="fw-bold mb-3">Login Activity</h5>
+                <hr>
+                <div wire:ignore>
+                    <canvas id="activityChart"></canvas>
+                </div>
             </div>
         </div>
-
-        <!-- Login History -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm p-3">
-                <h5 class="card-title">Login Activity</h5>
-                <p><strong>Last Login:</strong> Today 10:15 AM</p>
-                <p><strong>Device:</strong> Chrome - Windows</p>
-                <p><strong>IP:</strong> 192.168.1.24</p>
-                <button class="btn btn-outline-primary btn-sm">Logout All Devices</button>
-            </div>
-        </div>
-
-    </div>
-    <div class="row g-3 mt-1">
 
         <!-- Account Information -->
         <div class="col-lg-6">
-            <div class="card shadow-sm p-4">
+            <div class="card shadow-sm p-4 h-100">
 
                 <h5 class="fw-bold mb-3">Account Information</h5>
                 <hr>
@@ -85,54 +70,42 @@
 
                 <div class="d-flex flex-wrap gap-2">
                     <a class="btn btn-primary btn-sm" href="{{route('editprofile', Auth::user()->id)}}" wire:navigate>
-                     <i class="bi bi-pencil-square"></i> Edit Profile</a>
+                        <i class="bi bi-pencil-square"></i> Edit Profile</a>
 
-                    <a class="btn btn-outline-secondary btn-sm" href="{{route('editpassword', Auth::user()->id)}}" wire:navigate>
-                      Change Password</a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{{route('editpassword', Auth::user()->id)}}"
+                        wire:navigate>
+                        Change Password</a>
                 </div>
 
             </div>
         </div>
 
 
-        <!-- Active Sessions -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm p-4">
+    </div>
+    <!-- Courses & Activity -->
+    <div class="row g-3 mt-1">
 
-                <h5 class="fw-bold mb-3">Active Sessions</h5>
+        <!-- Login History -->
+        <div class="col-lg-12">
+            <div class="card shadow-sm p-3">
+                <h5 class="card-title">Login History</h5>
                 <hr>
-
-                <ul class="list-group list-group-flush">
-
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-laptop me-2 text-primary"></i>
-                            <strong>MacBook Pro</strong> - Chrome - New York, USA
-                        </div>
-                    </li>
-
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-phone me-2 text-success"></i>
-                            <strong>iPhone 12</strong> - Safari - Los Angeles, USA
-                        </div>
-                    </li>
-
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-pc-display me-2 text-warning"></i>
-                            <strong>Windows PC</strong> - Edge - Toronto, Canada
-                        </div>
-                    </li>
-
-                </ul>
-
-                <div class="mt-3 text-end">
-                    <button class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-box-arrow-right"></i> Log Out All Devices
-                    </button>
+                @foreach($activities as $activity)
+                <div class="infobox">
+                    <p class="mb-0"><strong>IP Address:</strong> {{ $activity->ip_address }}</p>
+                    <p class="mb-0"><strong>Device:</strong> {{ $activity->browser }} - {{ $activity->platform }}</p>
+                    <p class="mb-0"><strong>Location:</strong> {{ $activity->location }}</p>
+                    <p class="mb-0">
+                        <strong>Last Login:</strong>
+                        {{ \Carbon\Carbon::parse($activity->login_at)->format('d M Y, h:i A') }}
+                    </p>
                 </div>
-
+                @endforeach
+                <div class="btn-logout my-2">
+                    <a class="btn btn-danger" href="{{route('logoutactivity', Auth::user()->id)}}"><i
+                            class="fas fa-sign-out-alt"></i>
+                        Logout All Devices</a>
+                </div>
             </div>
         </div>
 
@@ -141,4 +114,43 @@
 
 
 @push('foot-script')
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    function initChart() {
+        const data = @json($graphData);
+
+        const labels = data.map(item => item.date);
+        const totals = data.map(item => item.total);
+
+        const ctx = document.getElementById('activityChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'My Login Activity',
+                    data: totals,
+                    borderWidth: 2,
+                    fill: true,
+                }]
+            }
+        });
+    }
+
+    initChart();
+
+    // Livewire v2 / v3 support
+    document.addEventListener("livewire:load", function() {
+        initChart();
+    });
+
+    document.addEventListener("livewire:navigated", function() {
+        initChart();
+    });
+
+});
+</script>
 @endpush

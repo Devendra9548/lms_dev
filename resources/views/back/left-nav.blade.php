@@ -45,7 +45,7 @@
                     <a class="nav-link" href="#"><i class="bi bi-shield-lock"></i> Security</a>
                 </li>
                 <li class="nav-item mt-3">
-                    <a class="btn btn-danger w-100" href="{{route('logout')}}">Logout</a>
+                    <a class="btn btn-danger w-100" href="{{route('logout')}}"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </li>
             </ul>
 
